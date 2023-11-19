@@ -19,11 +19,11 @@ for filepath in filepaths:
 
     # Printing Invoice number
     pdf.set_font(family="Times", style="B", size=16)
-    pdf.cell(w=50, h=8, txt=f"Invoice nr.{invoice_nr}",ln=1)
+    pdf.cell(w=50, h=8, txt=f"Invoice nr.{invoice_nr}", ln=1)
 
     # Printing Date below the invoice number.
     pdf.set_font(family="Times", style="B", size=16)
-    pdf.cell(w=50, h=8, txt=f"Dat:{date}",ln=1)
+    pdf.cell(w=50, h=8, txt=f"Dat:{date}", ln=1)
 
     # Add table to PDF
     # Extracting Excel file.
@@ -41,13 +41,32 @@ for filepath in filepaths:
     pdf.cell(w=30, h=8, txt=columns[4], border=1, ln=1)
 
     # Creating cell in pdf doc
-    for index ,row in df.iterrows():
+    for index, row in df.iterrows():
         pdf.set_font(family="Times", size=10)
-        pdf.set_text_color(80,80,80)
+        pdf.set_text_color(80, 80, 80)
         pdf.cell(w=30, h=8, txt=str(row["product_id"]), border=1)
         pdf.cell(w=70, h=8, txt=str(row["product_name"]), border=1)
         pdf.cell(w=30, h=8, txt=str(row["amount_purchased"]), border=1)
         pdf.cell(w=30, h=8, txt=str(row["price_per_unit"]), border=1)
         pdf.cell(w=30, h=8, txt=str(row["total_price"]), border=1, ln=1)
+
+    # Calculating total sum of the total_price column
+    total_sum = df["total_price"].sum()
+    pdf.set_font(family="Times", size=10)
+    pdf.set_text_color(80, 80, 80)
+    pdf.cell(w=30, h=8, txt="", border=1)
+    pdf.cell(w=70, h=8, txt="", border=1)
+    pdf.cell(w=30, h=8, txt="", border=1)
+    pdf.cell(w=30, h=8, txt="", border=1)
+    pdf.cell(w=30, h=8, txt=str(total_sum), border=1,ln=1)
+
+    # Add total sum sentence:
+    pdf.set_font(family="Times", size=10)
+    pdf.cell(w=30, h=8, txt=f"The total price is {total_sum}", ln=1)
+
+    # Add Company name and logo:
+    pdf.set_font(family="Times", size=10)
+    pdf.cell(w=30, h=8, txt="PythonHow")
+    pdf.image("pythonhow.png", w=10)
 
     pdf.output(f"PDFs/{filename}.pdf")
